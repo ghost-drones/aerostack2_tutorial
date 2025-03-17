@@ -42,5 +42,6 @@ docker run -it \
     --env SSH_AUTH_SOCK=/ssh-agent \
     --net=host \
     --privileged \
+    --gpus all \
     --name aerostack2_humble_cont \
     aerostack2_humble_img
