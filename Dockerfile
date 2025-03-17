@@ -44,8 +44,8 @@ RUN rosdep install --from-paths src --ignore-src -r -y
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon build --symlink-install --parallel-workers 3
 RUN pip3 install numpy==1.24.4
 
-RUN bash -c "source /root/tutorials/install/setup.bash" 
-RUN bash -c "export AEROSTACK2_TUTORIAL_PATH=/root/tutorials/src/aerostack2_tutorial" 
+RUN echo "source /root/tutorials/install/setup.bash" >> ~/.bashrc
+RUN echo "export AEROSTACK2_TUTORIAL_PATH=/root/tutorials/src/aerostack2_tutorial" >> ~/.bashrc
 
 COPY to_copy/tmux $HOME/.tmux.conf
 COPY to_copy/aliases $HOME/.bash_aliases

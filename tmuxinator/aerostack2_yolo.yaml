@@ -78,4 +78,4 @@ windows:
   - tutorial:
       layout: tiled
       panes:
-        - cd /root/tutorials/src/yolo_ros && ros2 launch yolo_bringup yolov8.launch.py use_3d:=False
+        - cd /root/tutorials/src/yolo_ros && ros2 launch yolo_bringup yolov8.launch.py use_3d:=False input_image_topic:=/drone0/sensor_measurements/gimbal/camera/image_raw device:=cuda:0
