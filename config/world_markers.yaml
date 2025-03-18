@@ -1,0 +1,58 @@
+world_name: empty
+origin:
+  latitude: 40.4405287
+  longitude: -3.6898277
+  altitude: 100.0
+drones:
+- model_type: quadrotor_base
+  model_name: drone0
+  flight_time: 60
+  xyz:
+  - 0.0
+  - 0.0
+  - 0.3
+  payload:
+  - model_type: gps
+    model_name: gps
+  - model_type: gimbal_speed
+    model_name: gimbal
+    payload:
+      model_type: hd_camera
+      model_name: camera
+objects:
+- model_name: marker_1
+  model_type: circulo_azul
+  xyz:
+  - -4.13
+  - 1.76
+  - 0.01
+- model_name: marker_2
+  model_type: cruz_rosa
+  xyz:
+  - -1.03
+  - -2.02
+  - 0.01
+- model_name: marker_3
+  model_type: estrela_verde
+  xyz:
+  - 2.0
+  - 3.94
+  - 0.01
+- model_name: marker_4
+  model_type: hexagono_vermelho
+  xyz:
+  - -3.52
+  - -2.43
+  - 0.01
+- model_name: marker_5
+  model_type: pentagono_marrom
+  xyz:
+  - -1.1
+  - -1.37
+  - 0.01
+- model_name: marker_6
+  model_type: triangulo_azul
+  xyz:
+  - -2.1
+  - 0.22
+  - 0.01
