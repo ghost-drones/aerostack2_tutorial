@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.9'>
-  <model name='hexagono_vermelho_fixed'>
-    <static>1</static>
+  <model name='ghost_marker'>
+    <static>true</static>
     <link name='link'>
       <visual name='visual'>
         <geometry>
@@ -14,7 +14,7 @@
           <specular>1.0 1.0 1.0 1</specular>
           <pbr>
             <metal>
-              <albedo_map>model://hexagono_vermelho_fixed/hexagono_vermelho_fixed.png</albedo_map>
+              <albedo_map>model://ghost_marker/ghost_marker.png</albedo_map>
             </metal>
           </pbr>
         </material>

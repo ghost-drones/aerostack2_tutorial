@@ -1,0 +1,110 @@
+drones:
+- flight_time: 60
+  model_name: drone0
+  model_type: quadrotor_base
+  payload:
+  - model_name: gps
+    model_type: gps
+  - model_name: gimbal
+    model_type: gimbal_speed
+    payload:
+      model_name: camera
+      model_type: hd_camera
+  xyz:
+  - -3.71
+  - 6.85
+  - 0.3
+objects:
+- model_name: eletroquad_arena
+  model_type: eletroquad_arena
+  rpy:
+  - 0.0
+  - 0.0
+  - 0.0
+  xyz:
+  - 0.0
+  - 0.0
+  - 0.1
+- model_name: base_inicial_slalom
+  model_type: ghost_marker
+  xyz:
+  - -12.5
+  - -10
+  - 0.11
+- model_name: barra_1
+  model_type: barra_rosa
+  xyz:
+  - -9.24
+  - -9.9
+  - 0.1
+- model_name: barra_2
+  model_type: barra_azul
+  xyz:
+  - -4.33
+  - -8.69
+  - 0.1
+- model_name: barra_3
+  model_type: barra_preto_fosco
+  xyz:
+  - 7.71
+  - -7.21
+  - 0.1
+- model_name: barra_4
+  model_type: barra_vermelha
+  xyz:
+  - 11.45
+  - -7.09
+  - 0.1
+- model_name: marker_1
+  model_type: circulo_azul
+  xyz:
+  - -3.71
+  - 6.85
+  - 0.11
+- model_name: marker_2
+  model_type: cruz_rosa
+  xyz:
+  - -2.87
+  - 0.74
+  - 0.11
+- model_name: marker_3
+  model_type: estrela_verde
+  xyz:
+  - -10.7
+  - 11.83
+  - 0.11
+- model_name: marker_4
+  model_type: hexagono_vermelho
+  xyz:
+  - -12.01
+  - 0.61
+  - 0.11
+- model_name: marker_6
+  model_type: triangulo_azul
+  xyz:
+  - -4.3
+  - 2.92
+  - 0.11
+- model_name: marker_7
+  model_type: casa_laranja
+  xyz:
+  - -5.92
+  - 9.3
+  - 0.11
+- model_name: base_inicial_hangthehook
+  model_type: ghost_marker
+  xyz:
+  - 9.76
+  - 6.7
+  - 0.11
+- model_name: mangueira_e_sustentacao
+  model_type: truss_with_hose
+  xyz:
+  - 8.4
+  - -2.44
+  - 0.12
+origin:
+  altitude: 2
+  latitude: -22.8627458
+  longitude: -43.2297722
+world_name: grass
