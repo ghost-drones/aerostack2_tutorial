@@ -1,7 +1,7 @@
 drones:
 - flight_time: 60
   model_name: drone0
-  model_type: quadrotor_base
+  model_type: x500_with_suction
   payload:
   - model_name: gps
     model_type: gps
@@ -11,8 +11,8 @@ drones:
       model_name: camera
       model_type: hd_camera
   xyz:
-  - -3.71
-  - 6.85
+  - -12.5
+  - -10
   - 0.3
 objects:
 - model_name: eletroquad_arena
@@ -26,7 +26,7 @@ objects:
   - 0.0
   - 0.1
 - model_name: base_inicial_slalom
-  model_type: ghost_marker
+  model_type: circulo_azul
   xyz:
   - -12.5
   - -10
@@ -34,77 +34,77 @@ objects:
 - model_name: barra_1
   model_type: barra_rosa
   xyz:
-  - -9.24
-  - -9.9
+  - -8.44
+  - -12.99
   - 0.1
 - model_name: barra_2
   model_type: barra_azul
   xyz:
-  - -4.33
-  - -8.69
+  - -0.53
+  - -11.99
   - 0.1
 - model_name: barra_3
   model_type: barra_preto_fosco
   xyz:
-  - 7.71
-  - -7.21
+  - 6.89
+  - -7.54
   - 0.1
 - model_name: barra_4
   model_type: barra_vermelha
   xyz:
-  - 11.45
-  - -7.09
+  - 11.48
+  - -10.19
   - 0.1
 - model_name: marker_1
-  model_type: circulo_azul
+  model_type: ghost_marker
   xyz:
-  - -3.71
-  - 6.85
+  - -4.0
+  - 11.49
   - 0.11
 - model_name: marker_2
-  model_type: cruz_rosa
+  model_type: ghost_marker
   xyz:
-  - -2.87
-  - 0.74
+  - -5.77
+  - 9.56
   - 0.11
 - model_name: marker_3
-  model_type: estrela_verde
+  model_type: ghost_marker
   xyz:
-  - -10.7
-  - 11.83
+  - -4.55
+  - -2.82
   - 0.11
-- model_name: marker_4
-  model_type: hexagono_vermelho
+- model_name: marker_5
+  model_type: ghost_marker
   xyz:
-  - -12.01
-  - 0.61
+  - -11.94
+  - 7.02
   - 0.11
 - model_name: marker_6
-  model_type: triangulo_azul
+  model_type: ghost_marker
   xyz:
-  - -4.3
-  - 2.92
+  - -11.85
+  - 9.08
   - 0.11
 - model_name: marker_7
-  model_type: casa_laranja
+  model_type: ghost_marker
   xyz:
-  - -5.92
-  - 9.3
+  - -9.28
+  - 2.21
   - 0.11
 - model_name: base_inicial_hangthehook
   model_type: ghost_marker
   xyz:
-  - 9.76
-  - 6.7
+  - 5.27
+  - 9.55
   - 0.11
 - model_name: mangueira_e_sustentacao
   model_type: truss_with_hose
   xyz:
-  - 8.4
-  - -2.44
+  - 9.61
+  - 0.16
   - 0.12
 origin:
   altitude: 2
   latitude: -22.8627458
   longitude: -43.2297722
-world_name: grass
+world_name: eletroquad

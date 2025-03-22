@@ -10,6 +10,8 @@ name: <%= drone_namespace %>
 attach: false
 root: ./
 startup_window: mission_monitoring
+pre_window: |
+  export AS2_EXTRA_DRONE_MODELS='x500_with_suction'
 windows:
   # Platform
   - platform:

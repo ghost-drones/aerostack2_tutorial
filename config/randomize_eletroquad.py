@@ -5,13 +5,13 @@ import sys
 
 # Template YAML original (não altere os campos que não devem ser modificados)
 yaml_template = """
-world_name: grass
+world_name: eletroquad
 origin:
   latitude: -22.8627458
   longitude: -43.2297722
   altitude: 2
 drones:
-- model_type: quadrotor_base
+- model_type: x500_with_suction
   model_name: drone0
   flight_time: 60
   xyz:
