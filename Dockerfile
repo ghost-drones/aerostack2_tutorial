@@ -36,7 +36,7 @@ RUN pip3 install PySimpleGUI-4-foss
 
 RUN mkdir -p /root/aerostack2_ws/src/
 WORKDIR /root/aerostack2_ws/src/
-RUN git clone https://github.com/aerostack2/aerostack2.git -b main
+RUN git clone git@github.com:ghost-drones/aerostack2.git -b add_gripper_to_gazebo
 
 WORKDIR /root/aerostack2_ws
 RUN rosdep update
@@ -77,8 +77,6 @@ RUN echo "export AEROSTACK2_TUTORIAL_PATH=/root/tutorials/src/aerostack2_tutoria
 
 COPY to_copy/tmux $HOME/.tmux.conf
 COPY to_copy/aliases $HOME/.bash_aliases
-RUN cp -r $AEROSTACK2_TUTORIAL_PATH/to_copy/models/* $AEROSTACK2_PATH/as2_simulation_assets/as2_gazebo_assets/models
-RUN cp -r $AEROSTACK2_TUTORIAL_PATH/to_copy/worlds/* $AEROSTACK2_PATH/as2_simulation_assets/as2_gazebo_assets/worlds
 RUN echo 'export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:/root/tutorials/src/aerostack2_tutorial/models' >> ~/.bashrc
 
 CMD ["bash"]

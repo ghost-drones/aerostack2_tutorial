@@ -11,7 +11,7 @@ attach: false
 root: ./
 startup_window: mission_monitoring
 pre_window: |
-  export AS2_EXTRA_DRONE_MODELS='x500_with_suction'
+  export AS2_EXTRA_DRONE_MODELS=''
 windows:
   # Platform
   - platform:
@@ -50,10 +50,17 @@ windows:
         - ros2 run as2_alphanumeric_viewer as2_alphanumeric_viewer_node --ros-args -r  __ns:=/<%= drone_namespace %>
         - ros2 run as2_python_api mission_executor --n <%= drone_namespace %> --use_sim_time --add_namespace
 
-  # Tutorial (YOLO node é lançado somente se yolo_launch for true)
-  - tutorial:
+  <%- if yolo_launch %>
+  # Yolo (YOLO node é lançado somente se yolo_launch for true)
+  - yolo:
       layout: tiled
       panes:
-      <%- if yolo_launch %>
         - cd /root/tutorials/src/yolo_ros && ros2 launch yolo_bringup yolov8.launch.py use_3d:=False input_image_topic:=/drone0/sensor_measurements/gimbal/camera/image_raw device:=cuda:0
-      <%- end %>
+  <%- end %>
+
+  # User (YOLO node é lançado somente se yolo_launch for true)
+  - user:
+      layout: tiled
+      panes:
+        - sleep 2; # Launch your mission here
+        - sleep 2; ros2 topic list

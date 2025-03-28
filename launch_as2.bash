@@ -1,47 +1,62 @@
 #!/bin/bash
 
 usage() {
+    echo "usage: $0 [options]"
     echo "  options:"
     echo "      -m: multi agent. Default not set"
     echo "      -n: select drones namespace to launch, values are comma separated. By default, it will get all drones from world description file"
     echo "      -s: if set, the simulation will not be launched. Default launch simulation"
     echo "      -g: launch using gnome-terminal instead of tmux. Default not set"
+    echo "      -y: launch YOLO node (caso contrário, o nó do YOLO não será iniciado)"
 }
 
 # Initialize variables with default values
 swarm="false"
 drones_namespace_comma=""
 launch_simulation="true"
+yolo_launch="false"
 use_gnome="false"
 
-# Arg parser
-while getopts "mn:sg" opt; do
-  case ${opt} in
-    m )
-      swarm="true"
-      ;;
-    n )
-      drones_namespace_comma="${OPTARG}"
-      ;;
-    s )
-      launch_simulation="false"
-      ;;
-    g )
-      use_gnome="true"
-      ;;
-    \? )
-      echo "Invalid option: -$OPTARG" >&2
-      usage
-      exit 1
-      ;;
-    : )
-      if [[ ! $OPTARG =~ ^[wrt]$ ]]; then
-        echo "Option -$OPTARG requires an argument" >&2
-        usage
-        exit 1
-      fi
-      ;;
-  esac
+# Usa getopt para tratar as opções, inclusive as numéricas
+TEMP=$(getopt -o "mn:sgy123" -n "$0" -- "$@")
+if [ $? != 0 ] ; then
+    echo "Erro ao analisar os argumentos." >&2
+    usage
+    exit 1
+fi
+eval set -- "$TEMP"
+
+while true; do
+    case "$1" in
+        -m)
+            swarm="true"
+            shift
+            ;;
+        -n)
+            drones_namespace_comma="$2"
+            shift 2
+            ;;
+        -s)
+            launch_simulation="false"
+            shift
+            ;;
+        -g)
+            use_gnome="true"
+            shift
+            ;;
+        -y)
+            yolo_launch="true"
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Erro interno!"
+            exit 1
+            ;;
+    esac
 done
 
 # Set simulation world description config file
@@ -76,6 +91,7 @@ for namespace in ${drone_namespaces[@]}; do
     drone_namespace=${namespace} \
     simulation_config_file=${simulation_config} \
     base_launch=${base_launch} \
+    yolo_launch=${yolo_launch} \
     ${tmuxinator_end}"
 
   sleep 0.1 # Wait for tmuxinator to finish

@@ -5,22 +5,32 @@ import sys
 
 # Template YAML original (não altere os campos que não devem ser modificados)
 yaml_template = """
-world_name: eletroquad
+world_name: grass
 origin:
   latitude: -22.8627458
   longitude: -43.2297722
   altitude: 2
 drones:
-- model_type: x500_with_suction
+- model_type: x500
   model_name: drone0
   flight_time: 60
   xyz:
   - 0.2
   - 0.0
-  - 0.3
+  - 0.5
   payload:
   - model_type: gps
     model_name: gps
+  - model_type: suction_gripper
+    model_name: gripper
+    xyz:
+    - 0.0
+    - 0.0
+    - -0.05
+    rpy:
+    - 0.0
+    - 1.5707
+    - 0.0
   - model_type: gimbal_speed
     model_name: gimbal
     payload:
@@ -127,6 +137,18 @@ objects:
   - -12.5
   - -12.5
   - 0.12
+- model_name: cubo_suporte
+  model_type: cubo_suporte
+  xyz:
+  - -12.5
+  - -12.5
+  - 0.12
+- model_name: gancho
+  model_type: gancho
+  xyz:
+  - -12.5
+  - -12.5
+  - 0.2
 """
 
 # Carrega o template YAML
@@ -153,6 +175,10 @@ hanghook = None
 mangueira = None
 base_slalom = None
 
+# Também captura os objetos gancho e cubo_suporte
+gancho = None
+cubo_suporte = None
+
 for obj in data["objects"]:
     nome = obj["model_name"]
     if nome.startswith("barra"):
@@ -165,6 +191,10 @@ for obj in data["objects"]:
         mangueira = obj
     elif nome == "base_inicial_slalom":
         base_slalom = obj
+    elif nome == "gancho":
+        gancho = obj
+    elif nome == "cubo_suporte":
+        cubo_suporte = obj
     # objetos como eletroquad_arena não serão alterados
 
 # Atualiza posições das barras
@@ -254,6 +284,22 @@ elif tarefa == 3:
 else:
     print("Tarefa inválida. Escolha 1, 2 ou 3.")
     exit(1)
+
+# Modifica dinamicamente as posições de gancho e cubo_suporte
+if tarefa == 2:
+    # Se for tarefa 2, ambos os objetos gancho e cubo_suporte devem ter as mesmas posições em x e y que o drone (z inalterado)
+    if gancho is not None:
+        gancho["xyz"][0] = drone["xyz"][0]
+        gancho["xyz"][1] = drone["xyz"][1]
+    #if cubo_suporte is not None:
+        cubo_suporte["xyz"][0] = drone["xyz"][0]
+        cubo_suporte["xyz"][1] = drone["xyz"][1]
+else:
+    # Se não for tarefa 12, remova gancho e cubo_suporte do YAML
+    if gancho is not None:
+        data["objects"].remove(gancho)
+    if cubo_suporte is not None:
+        data["objects"].remove(cubo_suporte)
 
 # Atualiza o campo model_type para ghost_marker conforme a missão:
 if tarefa == 1:
