@@ -2,13 +2,15 @@
   # Global Parameters
   ros__parameters:
     use_sim_time: true
-    tf_timeout_threshold: 0.1
+    tf_timeout_threshold: 0.05
 
 /**:
   # Basic Robotics Functions
   platform:
     ros__parameters:
       cmd_freq: 50.0  # Hz of platform commands send
+      max_thrust: 29.0
+      min_thrust: 0.15
 
   # State Estimator
   state_estimator:
@@ -51,3 +53,11 @@
       gimbal_frame_id: gimbal/_0/_1/_2
       gimbal_base_frame_id: gimbal
       gimbal_threshold: 0.01
+
+# Specific Parameters for each drone
+drone0:
+  # Platform
+  mavros/mavros_node:
+    ros__parameters:
+      fcu_url: "udp://:14540@127.0.0.1:14557" # Autopilot address for connection
+      tgt_system: 1 # Target system ID = Instance + 1
