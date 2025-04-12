@@ -42,7 +42,7 @@ windows:
             namespace:=<%= drone_namespace %>
             config_file:=config/config.yaml
         # Motion Controller
-        - ros2 launch as2_motion_controller controller_launch.py namespace:=<%= drone_namespace %> config_file:=config/config.yaml plugin_name:=pid_speed_controller plugin_config_file:=config/pid_speed_controller.yaml
+        #- ros2 launch as2_motion_controller controller_launch.py namespace:=<%= drone_namespace %> config_file:=config/config.yaml plugin_name:=pid_speed_controller plugin_config_file:=config/pid_speed_controller.yaml
 
   # Behaviors
   - behaviors:

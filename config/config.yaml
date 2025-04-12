@@ -21,11 +21,6 @@
       use_gps: true
       set_origin_on_start: true # Set origin on start
 
-  # Motion Controller
-  controller_manager:
-    ros__parameters:
-      cmd_freq: 50.0 # Hz of controller commands send
-
   # Behaviors Motion
   TakeoffBehavior:
     ros__parameters:
