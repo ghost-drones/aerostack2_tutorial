@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-n', '--namespace',
                         type=str,
-                        default='drone0',
+                        default='x500_px4',
                         help='ID of the drone to be used in the mission')
     parser.add_argument('-v', '--verbose',
                         action='store_true',

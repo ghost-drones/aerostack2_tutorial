@@ -7,7 +7,6 @@ usage() {
     echo "      -n: select drones namespace to launch, values are comma separated. By default, it will get all drones from world description file"
     echo "      -s: if set, the simulation will not be launched. Default launch simulation"
     echo "      -g: launch using gnome-terminal instead of tmux. Default not set"
-    echo "      -y: launch YOLO node (caso contrário, o nó do YOLO não será iniciado)"
     echo "      -1, -2 ou -3: seleciona a missão a ser executada (ex.: -1 para missão 1)"
 }
 
@@ -16,7 +15,6 @@ swarm="false"
 drones_namespace_comma=""
 launch_simulation="true"
 use_gnome="false"
-yolo_launch="false"
 mission=""
 
 # Usa getopt para tratar as opções, inclusive as numéricas

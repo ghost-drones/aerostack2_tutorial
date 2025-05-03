@@ -2,17 +2,18 @@ import yaml
 import random
 import math
 import sys
+import subprocess
 
 # Template YAML original (não altere os campos que não devem ser modificados)
 yaml_template = """
-world_name: grass
+world_name: default
 origin:
   latitude: -22.8627458
   longitude: -43.2297722
   altitude: 2
 drones:
-- model_type: x500
-  model_name: drone0
+- model_type: x500_px4
+  model_name: x500_px4
   flight_time: 60
   xyz:
   - 0.2
@@ -21,21 +22,22 @@ drones:
   payload:
   - model_type: gps
     model_name: gps
-  - model_type: suction_gripper
-    model_name: gripper
+  - model_type: hd_camera
+    model_name: camera
     xyz:
-    - 0.0
-    - 0.0
-    - -0.05
+      - 0.04
+      - 0.0
+      - -0.1
     rpy:
-    - 0.0
-    - 1.5707
-    - 0.0
-  - model_type: gimbal_speed
-    model_name: gimbal
-    payload:
-      model_type: hd_camera
-      model_name: camera
+      - 0.0
+      - 0.0
+      - 0.0
+  - model_type: gancho
+    model_name: gancho
+    xyz:
+      - 0.0
+      - 0.0
+      - -0.05
 objects:
 - model_name: eletroquad_arena
   model_type: eletroquad_arena
@@ -55,24 +57,32 @@ objects:
   - 0.11
 - model_name: barra_1
   model_type: barra_rosa
+  object_bridges:
+    - "pose"
   xyz:
   - 1.05
   - -3.14
   - 0.1
 - model_name: barra_2
   model_type: barra_azul
+  object_bridges:
+    - "pose"
   xyz:
   - 2.77
   - -1.35
   - 0.1
 - model_name: barra_3
   model_type: barra_preto_fosco
+  object_bridges:
+    - "pose"
   xyz:
   - 3.54
   - -0.8
   - 0.1
 - model_name: barra_4
   model_type: barra_vermelha
+  object_bridges:
+    - "pose"
   xyz:
   - 4.97
   - 1.39
@@ -149,6 +159,12 @@ objects:
   - -12.5
   - -12.5
   - 0.2
+- model_name: fita
+  model_type: fita
+  xyz:
+  - 0.0
+  - 0.0
+  - 0.11
 """
 
 # Carrega o template YAML
@@ -166,7 +182,7 @@ if len(sys.argv) > 1:
 else:
     tarefa = int(input("Qual tarefa (1, 2 ou 3)? ").strip())
 
-print("TAREFA: ", tarefa)
+print("TAREFA:", tarefa)
 
 # Separa os objetos em grupos conforme suas regras
 barras = []
@@ -174,8 +190,6 @@ markers = []
 hanghook = None
 mangueira = None
 base_slalom = None
-
-# Também captura os objetos gancho e cubo_suporte
 gancho = None
 cubo_suporte = None
 
@@ -195,13 +209,8 @@ for obj in data["objects"]:
         gancho = obj
     elif nome == "cubo_suporte":
         cubo_suporte = obj
-    # objetos como eletroquad_arena não serão alterados
 
 # Atualiza posições das barras
-# Regras para barras:
-# - Os valores de x devem ser sequenciais, entre -12 e 12, com espaçamento entre 2.5 e 5 metros
-# - Os valores de y devem ser sorteados aleatoriamente entre -13 e -7
-
 def generate_bar_positions(n_barras, x_min=-10, x_max=12, min_dist=3):
     positions = []
     while len(positions) < n_barras:
@@ -212,17 +221,11 @@ def generate_bar_positions(n_barras, x_min=-10, x_max=12, min_dist=3):
 
 n_barras = len(barras)
 x_positions = generate_bar_positions(n_barras)
-
-# Atualiza cada barra
 for i, barra in enumerate(barras):
     barra["xyz"][0] = round(x_positions[i], 2)
     barra["xyz"][1] = round(random.uniform(-13, -7), 2)
-    # z permanece inalterado
 
 # Atualiza posições dos markers
-# Regras para markers:
-# - Cada marker deve ficar dentro de: -13 < x < -2 e -3 < y < 13
-# - Distância mínima entre qualquer par de markers: 2 metros
 def is_valid_marker(pos, pos_list, min_dist=2):
     for p in pos_list:
         if math.sqrt((pos[0] - p[0])**2 + (pos[1] - p[1])**2) < min_dist:
@@ -231,7 +234,7 @@ def is_valid_marker(pos, pos_list, min_dist=2):
 
 novas_posicoes_markers = []
 for marker in markers:
-    for _ in range(100):  # tenta 100 vezes encontrar uma posição válida
+    for _ in range(100):
         x = random.uniform(-13, -2)
         y = random.uniform(-3, 13)
         if is_valid_marker((x, y), novas_posicoes_markers):
@@ -246,13 +249,9 @@ if remover > 0 and len(markers) > remover:
     markers_remover = random.sample(markers, remover)
     for m in markers_remover:
         data["objects"].remove(m)
-    # Atualiza a lista de markers restantes
     markers = [m for m in markers if m not in markers_remover]
 
 # Atualiza as posições de base_inicial_hangthehook e mangueira_e_sustentacao
-# Regras:
-# - Novas posições: 2 < x < 13 e -3 < y < 13
-# - Devem estar separados por pelo menos 9 metros
 def posicao_aleatoria():
     return (random.uniform(2, 13), random.uniform(-3, 13))
 
@@ -283,39 +282,61 @@ elif tarefa == 3:
         drone["xyz"][1] = escolhido["xyz"][1]
 else:
     print("Tarefa inválida. Escolha 1, 2 ou 3.")
-    exit(1)
+    sys.exit(1)
 
+# Armazena posições iniciais antes de modificações
+initial_drone_pos = list(data["drones"][0]["xyz"])
+initial_mangueira_pos = []
+for obj in data["objects"]:
+    if obj.get("model_name") == "mangueira_e_sustentacao":
+        initial_mangueira_pos = list(obj["xyz"])
+        break
+        
 # Modifica dinamicamente as posições de gancho e cubo_suporte
-if tarefa == 2:
-    # Se for tarefa 2, ambos os objetos gancho e cubo_suporte devem ter as mesmas posições em x e y que o drone (z inalterado)
-    if gancho is not None:
-        gancho["xyz"][0] = drone["xyz"][0]
-        gancho["xyz"][1] = drone["xyz"][1]
-    #if cubo_suporte is not None:
-        cubo_suporte["xyz"][0] = drone["xyz"][0]
-        cubo_suporte["xyz"][1] = drone["xyz"][1]
-else:
-    # Se não for tarefa 12, remova gancho e cubo_suporte do YAML
-    if gancho is not None:
-        data["objects"].remove(gancho)
-    if cubo_suporte is not None:
-        data["objects"].remove(cubo_suporte)
+if not tarefa == 2:
+  if gancho is not None:
+      data["objects"].remove(gancho)
+  if cubo_suporte is not None:
+      data["objects"].remove(cubo_suporte)
 
-# Atualiza o campo model_type para ghost_marker conforme a missão:
+# Chamada de randomize_curva e inclusão/remoção da fita
+if tarefa == 2:
+    # Parâmetros para randomize_curva usando posições iniciais
+    x0, y0 = initial_drone_pos[0], initial_drone_pos[1]
+    yaw0 = 0.0  # ajustar se tiver valor de yaw disponível
+    x1, y1 = initial_mangueira_pos[0], initial_mangueira_pos[1]
+    yaw1 = 0.0  # ajustar se tiver valor de yaw disponível
+
+    # Gera a curva suave entre drone e truss_with_hose
+    print(str(x0), str(y0), str(yaw0), str(x1), str(y1), str(yaw1))
+    subprocess.run([
+        sys.executable,
+        "randomize_curva.py",
+        "--x0", str(x0+0.4),
+        "--y0", str(y0),
+        "--yaw0", str(yaw0),
+        "--x1", str(x1),
+        "--y1", str(y1),
+        "--yaw1", str(yaw1-1.5707)
+    ], check=True)
+
+    # Mantém a fita no ambiente (padrão no template)
+else:
+    # Remove a fita para missões diferentes de 2
+    data["objects"] = [obj for obj in data["objects"] if obj.get("model_name") != "fita"]
+
+# Atualiza o campo model_type para ghost_marker conforme a missão
 if tarefa == 1:
-    # Missão 1: todos os markers e a base_inicial_hangthehook
     for marker in markers:
         marker["model_type"] = "ghost_marker"
     if hanghook is not None:
         hanghook["model_type"] = "ghost_marker"
 elif tarefa == 2:
-    # Missão 2: todos os markers e a base_inicial_slalom
     for marker in markers:
         marker["model_type"] = "ghost_marker"
     if base_slalom is not None:
         base_slalom["model_type"] = "ghost_marker"
 elif tarefa == 3:
-    # Missão 3: base_inicial_slalom e base_inicial_hangthehook
     if base_slalom is not None:
         base_slalom["model_type"] = "ghost_marker"
     if hanghook is not None:
