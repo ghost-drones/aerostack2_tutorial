@@ -46,12 +46,12 @@
 
 # Specific Parameters for each drone
 x500_px4:
-  platform:
-    ros__parameters:
-      fmu_prefix: /x500_px4
-      tgt_system: 1
+  #platform:
+  #  ros__parameters:
+  #    fmu_prefix: /x500_px4
+  #    target_system_id: 1
 
-#  mavros/mavros_node:
-#    ros__parameters:
-#      fcu_url: "udp://:14540@127.0.0.1:14557"
-#      tgt_system: 1
+  mavros/mavros_node:
+    ros__parameters:
+      fcu_url: "udp://:14540@127.0.0.1:14557"
+      tgt_system: 1
