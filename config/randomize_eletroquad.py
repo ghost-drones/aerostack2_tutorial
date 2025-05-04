@@ -147,18 +147,6 @@ objects:
   - -12.5
   - -12.5
   - 0.12
-- model_name: cubo_suporte
-  model_type: cubo_suporte
-  xyz:
-  - -12.5
-  - -12.5
-  - 0.12
-- model_name: gancho
-  model_type: gancho
-  xyz:
-  - -12.5
-  - -12.5
-  - 0.2
 - model_name: fita
   model_type: fita
   xyz:
@@ -190,8 +178,6 @@ markers = []
 hanghook = None
 mangueira = None
 base_slalom = None
-gancho = None
-cubo_suporte = None
 
 for obj in data["objects"]:
     nome = obj["model_name"]
@@ -205,10 +191,6 @@ for obj in data["objects"]:
         mangueira = obj
     elif nome == "base_inicial_slalom":
         base_slalom = obj
-    elif nome == "gancho":
-        gancho = obj
-    elif nome == "cubo_suporte":
-        cubo_suporte = obj
 
 # Atualiza posições das barras
 def generate_bar_positions(n_barras, x_min=-10, x_max=12, min_dist=3):
@@ -292,13 +274,6 @@ for obj in data["objects"]:
         initial_mangueira_pos = list(obj["xyz"])
         break
         
-# Modifica dinamicamente as posições de gancho e cubo_suporte
-if not tarefa == 2:
-  if gancho is not None:
-      data["objects"].remove(gancho)
-  if cubo_suporte is not None:
-      data["objects"].remove(cubo_suporte)
-
 # Chamada de randomize_curva e inclusão/remoção da fita
 if tarefa == 2:
     # Parâmetros para randomize_curva usando posições iniciais

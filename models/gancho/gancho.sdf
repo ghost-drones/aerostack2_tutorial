@@ -68,7 +68,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
-                    <uri>model://gancho/meshes/gancho_eletroquad.dae</uri>
+                    <uri>model://gancho/meshes/gancho.dae</uri>
                 </mesh>
                 </geometry>
                 <surface>
@@ -88,7 +88,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
-                    <uri>model://gancho/meshes/gancho_eletroquad.dae</uri>
+                    <uri>model://gancho/meshes/gancho.dae</uri>
                 </mesh>
                 </geometry>
             </visual>

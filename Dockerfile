@@ -1,4 +1,4 @@
-# Ghost Maio 2025
+# Ghost 2025
 
 # Ubuntu 22.04
 # ROS2 Humble
@@ -72,6 +72,7 @@ RUN rm -rf aerostack2
 RUN --mount=type=ssh git clone git@github.com:ghost-drones/aerostack2.git
 
 RUN export GZ_VERSION=harmonic
+WORKDIR /root/aerostack2_ws/
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon build --symlink-install --parallel-workers 3 --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 # mavros
@@ -79,10 +80,6 @@ RUN sudo apt install ros-humble-mavros ros-humble-mavros-extras -y
 RUN wget https://raw.githubusercontent.com/mavlink/mavros/ros2/mavros/scripts/install_geographiclib_datasets.sh
 RUN chmod +x install_geographiclib_datasets.sh
 RUN ./install_geographiclib_datasets.sh
-
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
-RUN echo 'export AEROSTACK2_PATH=/root/aerostack2_ws/src/aerostack2' >> ~/.bashrc
-RUN echo 'source $AEROSTACK2_PATH/as2_cli/setup_env.bash' >> ~/.bashrc
 
 # Ghost AS2 tutorial
 WORKDIR $HOME

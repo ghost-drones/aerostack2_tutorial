@@ -174,3 +174,4 @@ cython_debug/
 .pypirc
 
 config/world_eletroquad.yaml
+models/fita/fita.sdf

@@ -43,5 +43,5 @@ docker run -it \
     --net=host \
     --privileged \
     --gpus all \
-    --name aerostack2_cont \
-    aerostack2_img
+    --name aerostack2_humble_cont \
+    aerostack2_humble_img
