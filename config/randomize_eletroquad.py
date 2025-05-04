@@ -15,6 +15,29 @@ drones:
 - model_type: x500_px4
   model_name: x500_px4
   flight_time: 60
+  xyz:
+  - 0.2
+  - 0.0
+  - 0.5
+  payload:
+  - model_type: gps
+    model_name: gps
+  - model_type: hd_camera
+    model_name: camera
+    xyz:
+      - 0.04
+      - 0.0
+      - -0.1
+    rpy:
+      - 0.0
+      - 0.0
+      - 0.0
+  - model_type: gancho
+    model_name: gancho
+    xyz:
+      - 0.0
+      - 0.0
+      - -0.05
 objects:
 - model_name: eletroquad_arena
   model_type: eletroquad_arena
