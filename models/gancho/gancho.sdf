@@ -14,7 +14,14 @@
                 </inertia>
             </inertial>
             <visual name='sustentacao_gancho_visual'>
+                <pose>0 0 0 0 0 -1.5707</pose>
                 <geometry>
+                    <mesh>
+                        <uri>model://gancho/meshes/suporte_gancho_eletroquad.dae</uri>
+                    </mesh>
+                </geometry>
+
+                <!--<geometry>
                     <cylinder>
                         <radius>0.02</radius>
                         <length>0.01</length>
@@ -23,12 +30,12 @@
                 <material>
                     <diffuse>0.02 0.02 0.02</diffuse>
                     <specular>0.3 0.3 0.3</specular>
-                </material>
+                </material>-->
             </visual>
         </link>
 
         <model name="gancho_eletroquad">
-            <pose>0 0 -0.11 0 0 0</pose>
+            <pose>0.016 0.001 -0.1325 0 0 -3.14159</pose>
             <static>false</static>
             <link name="link">
             <inertial>
@@ -44,31 +51,11 @@
                 </inertia>
             </inertial>
 
-            <collision name="collision_top">
-                <pose>0 0 0.002 0 0 0</pose>
-                <geometry>
-                <box>
-                    <size>0.13 0.13 0.005</size>
-                </box>
-                </geometry>
-                <surface>
-                <contact>
-                    <ode>
-                    <min_depth>0.001</min_depth>
-                    <max_vel>0</max_vel>
-                    </ode>
-                </contact>
-                <friction>
-                    <ode/>
-                </friction>
-                </surface>
-            </collision>
-
             <collision name="collision_middle">
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
-                    <uri>model://gancho/meshes/gancho.dae</uri>
+                    <uri>model://gancho/meshes/gancho_eletroquad.dae</uri>
                 </mesh>
                 </geometry>
                 <surface>
@@ -88,7 +75,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
-                    <uri>model://gancho/meshes/gancho.dae</uri>
+                    <uri>model://gancho/meshes/gancho_eletroquad.dae</uri>
                 </mesh>
                 </geometry>
             </visual>
