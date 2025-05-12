@@ -22,22 +22,28 @@ drones:
   payload:
   - model_type: gps
     model_name: gps
-  - model_type: hd_camera
-    model_name: camera
+  - model_type: logitech_c920
+    model_name: camera_frontal
     xyz:
-      - 0.04
+      - 0.16
       - 0.0
-      - -0.1
+      - -0.02
+  - model_type: logitech_brio
+    model_name: camera_inferior
+    xyz:
+      - 0.043
+      - 0.0
+      - -0.035
     rpy:
       - 0.0
-      - 0.0
+      - 1.5707
       - 0.0
   - model_type: gancho
     model_name: gancho
     xyz:
       - 0.0
       - 0.0
-      - -0.05
+      - -0.047
 objects:
 - model_name: eletroquad_arena
   model_type: eletroquad_arena
