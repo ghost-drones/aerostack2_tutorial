@@ -8,13 +8,13 @@ TAKE_OFF_HEIGHT = 1.5  # Height in meters
 TAKE_OFF_SPEED = 1.0  # Max speed in m/s
 SLEEP_TIME = 0.5  # Sleep time between behaviors in seconds
 SPEED = 1.0  # Max speed in m/s
-HEIGHT = 3.0  # Height in meters
+HEIGHT = 2.0  # Height in meters
 DIM = 2.0
 
 PATH = [
     [2.0,  0.0, HEIGHT],
     [2.0, -2.0, HEIGHT],
-    [0.0, -22.0, HEIGHT],
+    [0.0, -2.0, HEIGHT],
     [0.0,  0.0, HEIGHT]
 ]
 

@@ -2,13 +2,38 @@ drones:
 - flight_time: 60
   model_name: x500_px4
   model_type: x500_px4
+  payload:
+  - model_name: gps
+    model_type: gps
+  - model_name: camera_frontal
+    model_type: logitech_c920
+    xyz:
+    - 0.16
+    - 0.0
+    - -0.02
+  - model_name: camera_inferior
+    model_type: logitech_brio
+    rpy:
+    - 0.0
+    - 1.5707
+    - 0.0
+    xyz:
+    - 0.043
+    - 0.0
+    - -0.035
+  - model_name: gancho
+    model_type: gancho
+    xyz:
+    - 0.0
+    - 0.0
+    - -0.047
   xyz:
+  - -6.5
   - 0
-  - 0
-  - 0.0
+  - 0.5
 objects:
-- model_name: hangthehook
-  model_type: hangthehook
+- model_name: slalom
+  model_type: slalom
   rpy:
   - 0.0
   - 0.0
@@ -17,27 +42,43 @@ objects:
   - 0.0
   - 0.0
   - 0.1
-- model_name: base_inicial_hangthehook
+- model_name: base_inicial_slalom
   model_type: circulo_azul
   xyz:
-  - 0.0
+  - -6.5
   - 0.0
   - 0.11
-- model_name: mangueira_e_sustentacao
-  model_type: truss_with_hose
-  rpy:
-  - 0.0
-  - 0.0
-  - 2.14
+- model_name: barra_1
+  model_type: barra_rosa
+  object_bridges:
+  - pose
   xyz:
-  - -2.97
-  - 1.88
-  - 0.12
-- model_name: fita
-  model_type: fita
+  - -1.91
+  - -0.36
+  - 0.1
+- model_name: barra_2
+  model_type: barra_azul
+  object_bridges:
+  - pose
   xyz:
-  - 0.0
-  - 0.0
+  - 0.01
+  - 3.49
+  - 0.1
+- model_name: barra_3
+  model_type: barra_preto_fosco
+  object_bridges:
+  - pose
+  xyz:
+  - 2.48
+  - 2.48
+  - 0.1
+- model_name: barra_4
+  model_type: barra_vermelha
+  object_bridges:
+  - pose
+  xyz:
+  - 6.96
+  - 0.15
   - 0.1
 origin:
   altitude: 2

@@ -1,8 +1,8 @@
 /**:
   # Global Parameters
   ros__parameters:
-    use_sim_time: true
-    tf_timeout_threshold: 0.05
+    #use_sim_time: true
+    tf_timeout_threshold: 15.0
 
 /**:
   # Basic Robotics Functions
@@ -10,19 +10,27 @@
     ros__parameters:
       cmd_freq: 100.0  # Hz of platform commands send
       info_freq: 10.0  # Hz of platform info publish
-      max_thrust: 15.0  # N
+      max_thrust: 29.0  # N
       min_thrust: 0.15  # N
       external_odom: false  # Use external odometry source
 
   # State Estimator
   state_estimator:
     ros__parameters:
+      # Indoor Raw Odometry
+      # plugin_name: "raw_odometry"
+      # # Indoor RealSense
+      # plugin_name: "raw_odometry"
+      # odom_topic: "sensor_measurements/realsense/odom"
+      # # Indoor Motion Capture
+      # plugin_name: "mocap_pose"
+      # mocap_topic: "/mocap/rigid_bodies"
+      # twist_smooth_filter_cte: 0.1
+      # orientation_smooth_filter_cte: 0.1
+      # # Outdoor (GPS) Raw Odometry
       plugin_name: "raw_odometry"
-      #use_gazebo_tf: true
-      #plugin_name: "ground_truth"
-      ## Outdoor (GPS)
-      #use_gps: true
-      #set_origin_on_start: true # Set origin on start
+      use_gps: true
+      set_origin_on_start: true
 
   # Behaviors Motion
   TakeoffBehavior:
@@ -46,7 +54,13 @@
 
 # Specific Parameters for each drone
 x500_px4:
+  #platform:
+  #  ros__parameters:
+  #    fmu_prefix: /x500_px4
+  #    tgt_system: 1
+
   mavros/mavros_node:
     ros__parameters:
-      fcu_url: "udp://:14540@127.0.0.1:14557"
+      fcu_url: "/dev/ttyUSB0:57600"
+      fmu_prefix: /x500_px4
       tgt_system: 1

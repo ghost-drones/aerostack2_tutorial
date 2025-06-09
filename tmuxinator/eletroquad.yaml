@@ -21,13 +21,14 @@ windows:
   - platform:
       layout: tiled
       panes:
-      # Platform
-      <%- if base_launch %>
-          - cd $AEROSTACK2_TUTORIAL_PATH/config && python3 randomize_eletroquad.py <%= mission %> && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=<%= simulation_config_file %>
-      <%- end %>
 
       # Launch px4 if simulation 
       <%- if sim %>
+
+        # Platform
+        <%- if base_launch %>
+          - cd $AEROSTACK2_TUTORIAL_PATH/config && python3 randomize_eletroquad.py <%= mission %> && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=<%= simulation_config_file %>
+        <%- end %>
 
         # Drone bridges: gz <-> ros2. Platform gazebo launches drone_bridges in its launchfile
         <%- if type == "px4" || type == "mavros" %>
@@ -60,10 +61,19 @@ windows:
         <%- end %>
 
       <%- else %>
-        - MicroXRCEAgent serial -b 921600 --dev /dev/ttyUSB0
-        - ros2 launch as2_platform_pixhawk pixhawk_launch.py
-            namespace:=<%= drone_namespace %>
-            platform_config_file:=config/config_real.yaml
+        <%- if type == "px4" %>
+          - MicroXRCEAgent serial -b 921600 --dev /dev/ttyUSB0
+          - ros2 launch as2_platform_pixhawk pixhawk_launch.py
+              namespace:=<%= drone_namespace %>
+              platform_config_file:=config/config_real.yaml
+        <%- else %>
+          - ros2 launch as2_platform_mavlink as2_platform_mavlink_launch.py
+              namespace:=<%= drone_namespace %>
+              platform_config_file:=config/config_real_mavros.yaml
+          - ros2 launch as2_platform_mavlink mavros_launch.py
+              namespace:=<%= drone_namespace %>
+              mavros_config_file:=config/config_real_mavros.yaml
+        <%- end %>
       <%- end %>
 
   # Basic Robotics Functions
@@ -91,9 +101,6 @@ windows:
         - ros2 launch as2_behaviors_trajectory_generation generate_polynomial_trajectory_behavior_launch.py 
             namespace:=<%= drone_namespace %> 
             config_file:=config/config.yaml
-        - ros2 launch as2_behaviors_perception point_gimbal_behavior.launch.py 
-            namespace:=<%= drone_namespace %> 
-            config_file:=config/config.yaml
 
   # Mission monitoring
   - mission_monitoring:
@@ -101,7 +108,7 @@ windows:
       panes:
         - ros2 run as2_alphanumeric_viewer as2_alphanumeric_viewer_node
             --ros-args -r  __ns:=/<%= drone_namespace %>
-        #- ros2 run as2_python_api mission_executor --n <%= drone_namespace %> --use_sim_time --add_namespace
+        - ros2 run as2_python_api mission_executor --n <%= drone_namespace %> --use_sim_time --add_namespace
   
   # User
   - user:
