@@ -42,7 +42,7 @@ class CameraInfoSubscriber(Node):
 
         # Subscrições
         self.create_subscription(CameraInfo,
-                                 '/x500_px4/sensor_measurements/camera/camera_info',
+                                 '/x500_px4/sensor_measurements/camera_frontal/camera_info',
                                  self.camera_info_callback, 10)
         self.create_subscription(PoseStamped,
                                  '/x500_px4/ground_truth/pose',
@@ -50,7 +50,7 @@ class CameraInfoSubscriber(Node):
                                  qos_profile=QoSProfile(depth=10,
                                                         reliability=ReliabilityPolicy.BEST_EFFORT))
         self.create_subscription(Image,
-                                 '/x500_px4/sensor_measurements/camera/image_raw',
+                                 '/x500_px4/sensor_measurements/camera_frontal/image_raw',
                                  self.image_callback, 10)
 
         # Publicador da imagem com deteções
