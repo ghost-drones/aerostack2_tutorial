@@ -2,32 +2,79 @@
 
 # Ubuntu 22.04
 # ROS2 Humble
-# Aerostack2, 
 
-FROM aerostack2/nightly-humble:latest
+###########################################
+# Base image
+###########################################
+FROM ubuntu:22.04 AS base
 
-WORKDIR /root/
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Gazebo Fortress clean uninstall
-RUN apt remove ignition* -y
-RUN apt autoremove -y
+# Install language
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  locales \
+  && locale-gen en_US.UTF-8 \
+  && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
+  && rm -rf /var/lib/apt/lists/*
+ENV LANG=en_US.UTF-8
 
-# Install Gazebo Harmonic
-RUN apt-get install lsb-release wget gnupg && apt-get update
-RUN apt-get install nano && apt-get update
-RUN wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-RUN apt-get update && apt-get install -y -q gz-harmonic
+# Install timezone
+RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime \
+  && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends tzdata \
+  && dpkg-reconfigure --frontend noninteractive tzdata \
+  && rm -rf /var/lib/apt/lists/*
 
-# Install ros-gazebo dependencies
-RUN apt update && apt install ros-humble-ros-gzharmonic -y
+RUN apt-get update && apt-get -y upgrade \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install common programs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    gnupg2 \
+    lsb-release \
+    sudo \
+    software-properties-common \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ROS2
+RUN sudo add-apt-repository universe \
+  && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null \
+  && apt-get update && apt-get install -y --no-install-recommends \
+    ros-humble-ros-base \
+    python3-argcomplete \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV ROS_DISTRO=humble
+ENV AMENT_PREFIX_PATH=/opt/ros/humble
+ENV COLCON_PREFIX_PATH=/opt/ros/humble
+ENV LD_LIBRARY_PATH=/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib
+ENV PATH=/opt/ros/humble/bin:$PATH
+ENV PYTHONPATH=/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages
+ENV ROS_PYTHON_VERSION=3
+ENV ROS_VERSION=2
+ENV ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
+ENV DEBIAN_FRONTEND=
+
+# Agent forwarding during docker build https://stackoverflow.com/questions/43418188/ssh-agent-forwarding-during-docker-build
+
+ENV DOCKER_BUILDKIT=1
+RUN apt-get install -y openssh-client
+ENV GIT_SSH_COMMAND="ssh -v"
+USER root
+
+RUN mkdir -p -m 0600 ~/.ssh/ && ssh-keyscan github.com >> ~/.ssh/known_hosts
+ARG HOME=/root
+
+## ROS2 utils
 
 RUN apt-get update
 RUN apt-get install apt-utils software-properties-common -y
 
-
 RUN apt install git tmux tmuxinator -y
-## ROS2 utils
 
 RUN apt-get install python3-rosdep  \
                 python3-pip     \
@@ -55,54 +102,7 @@ RUN rm -rf log # remove log folder
 RUN pip3 install colcon-lcov-result cpplint cmakelint
 RUN pip3 install PySimpleGUI-4-foss
 
-RUN mkdir -p /root/aerostack2_ws/src/
-WORKDIR /root/aerostack2_ws/src/
-
-# Agent forwarding during docker build https://stackoverflow.com/questions/43418188/ssh-agent-forwarding-during-docker-build
-
-ENV DOCKER_BUILDKIT=1
-RUN apt-get install -y openssh-client
-ENV GIT_SSH_COMMAND="ssh -v"
-USER root
-
-RUN mkdir -p -m 0600 ~/.ssh/ && ssh-keyscan github.com >> ~/.ssh/known_hosts
-ARG HOME=/root
-
-RUN rm -rf aerostack2
-RUN --mount=type=ssh git clone git@github.com:ghost-drones/aerostack2.git
-
-RUN export GZ_VERSION=harmonic
-WORKDIR /root/aerostack2_ws/
-RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon build --symlink-install --parallel-workers 3 --cmake-args -DCMAKE_BUILD_TYPE=Release
-
-# mavros
-RUN sudo apt install ros-humble-mavros ros-humble-mavros-extras -y 
-RUN wget https://raw.githubusercontent.com/mavlink/mavros/ros2/mavros/scripts/install_geographiclib_datasets.sh
-RUN chmod +x install_geographiclib_datasets.sh
-RUN ./install_geographiclib_datasets.sh
-
-# Ghost AS2 tutorial
-WORKDIR $HOME
-RUN mkdir -p tutorials/src
-WORKDIR $HOME/tutorials/src
-RUN --mount=type=ssh git clone git@github.com:ghost-drones/aerostack2_tutorial.git
-
-COPY to_copy/tmux $HOME/.tmux.conf
-COPY to_copy/aliases $HOME/.bash_aliases
-RUN echo 'export GZ_SIM_RESOURCE_PATH=$GZ_SIM_RESOURCE_PATH:/root/tutorials/src/aerostack2_tutorial/models' >> ~/.bashrc
-
-# Ghost PX4
-WORKDIR /root/
-RUN --mount=type=ssh git clone -b release/1.15 git@github.com:ghost-drones/PX4-Autopilot.git --recursive
-WORKDIR /root/PX4-Autopilot/
-
-# Upgrading the system
-RUN apt update && apt upgrade -y
-RUN apt-get install wget -y
-
-# Install dependencies
-RUN ./Tools/setup/ubuntu.sh --no-nuttx
-RUN make px4_sitl
+RUN pip install "numpy<1.24"
 
 WORKDIR $HOME
 # PX4 Offboard dependencies
@@ -118,24 +118,10 @@ RUN sudo ldconfig /usr/local/lib/
 WORKDIR $HOME/tutorials/src/
 RUN git clone -b release/1.15 https://github.com/PX4/px4_msgs.git
 RUN git clone https://github.com/PX4/px4_ros_com.git
+RUN git clone https://github.com/ros/executive_smach.git
 WORKDIR $HOME/tutorials
 RUN rosdep install --from-paths src --ignore-src -r -y
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon build --symlink-install
 RUN echo "source /root/tutorials/install/setup.bash" >> ~/.bashrc
 RUN echo "export AEROSTACK2_TUTORIAL_PATH=/root/tutorials/src/aerostack2_tutorial" >> ~/.bashrc
 RUN sudo apt-get install nano
-
-# AS2 Aerial Platforms
-WORKDIR $HOME/aerostack2_ws/src/aerostack2/as2_aerial_platforms
-
-# PX4 Platform
-RUN --mount=type=ssh git clone git@github.com:ghost-drones/as2_platform_pixhawk.git
-
-# PX4 Platform
-RUN --mount=type=ssh git clone git@github.com:ghost-drones/as2_platform_mavlink.git
-
-# Mavlink Platform
-WORKDIR /root/aerostack2_ws
-RUN pip3 install numpy==1.24.4
-
-CMD ["bash"]

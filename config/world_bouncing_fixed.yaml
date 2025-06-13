@@ -45,38 +45,8 @@ objects:
 - model_name: marker_1
   model_type: circulo_azul
   xyz:
-  - -0.24
   - 2.77
-  - 0.11
-- model_name: marker_2
-  model_type: cruz_rosa
-  xyz:
-  - -2.83
-  - -2.14
-  - 0.11
-- model_name: marker_3
-  model_type: estrela_verde
-  xyz:
-  - 3.56
-  - -0.57
-  - 0.11
-- model_name: marker_4
-  model_type: hexagono_vermelho
-  xyz:
-  - 1.48
-  - -3.4
-  - 0.11
-- model_name: marker_5
-  model_type: pentagono_marrom
-  xyz:
-  - -3.28
-  - 0.35
-  - 0.11
-- model_name: marker_7
-  model_type: casa_laranja
-  xyz:
-  - -3.22
-  - 3.09
+  - -0.44
   - 0.11
 origin:
   altitude: 2
