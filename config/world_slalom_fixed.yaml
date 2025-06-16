@@ -22,12 +22,12 @@ drones:
     - 0.0
     - -0.035
   xyz:
-  - 0
+  - -6.5
   - 0
   - 0.5
 objects:
-- model_name: bouncing
-  model_type: bouncing
+- model_name: slalom
+  model_type: slalom
   rpy:
   - 0.0
   - 0.0
@@ -36,12 +36,44 @@ objects:
   - 0.0
   - 0.0
   - 0.1
-- model_name: marker_1
+- model_name: base_inicial_slalom
   model_type: circulo_azul
   xyz:
-  - 2.77
-  - -0.44
+  - -6.5
+  - 0.0
   - 0.11
+- model_name: barra_1
+  model_type: barra_preto_fosco
+  object_bridges:
+  - pose
+  xyz:
+  - -2.1
+  - 2.0
+  - 0.1
+- model_name: barra_2
+  model_type: barra_rosa
+  object_bridges:
+  - pose
+  xyz:
+  - 1.01
+  - -1.13
+  - 0.1
+- model_name: barra_3
+  model_type: barra_azul
+  object_bridges:
+  - pose
+  xyz:
+  - 3.92
+  - 1.68
+  - 0.1
+- model_name: barra_4
+  model_type: barra_vermelha
+  object_bridges:
+  - pose
+  xyz:
+  - 5.78
+  - -0.93
+  - 0.1
 origin:
   altitude: 2
   latitude: -22.8627458

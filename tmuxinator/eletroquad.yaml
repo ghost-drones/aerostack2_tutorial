@@ -24,7 +24,9 @@ windows:
       # Platform
       <%- if base_launch %>
           #- cd $AEROSTACK2_TUTORIAL_PATH/config && python3 randomize_eletroquad.py <%= mission %> && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=<%= simulation_config_file %>
-          - cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_bouncing_fixed.yaml
+          #- cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_bouncing_fixed.yaml
+          - cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_slalom_fixed.yaml
+
       <%- end %>
 
       # Launch px4 if simulation 
@@ -75,20 +77,14 @@ windows:
   - user:
       layout: tiled
       panes:
-        - sleep 2; ros2 topic hz /x500_px4/fmu/in/trajectory_setpoint
-
-        <%- if type == "px4" %>
-        - sleep 2; ros2 topic echo /<%= drone_namespace %>/fmu/in/trajectory_setpoint
-
-        <%- elsif type == "mavros" %>
-        - sleep 2; ros2 topic echo /<%= drone_namespace %>/mavros/setpoint_position/local
-
-        <%- else %>
-        - sleep 2;
-        <%- end %>
-
+        - sleep 5; ros2 launch eletroquad25_sm eletroquad25_sm_launch.py
+        - #rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/bouncing.rviz
+        - rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/slalom.rviz
+  
   # State machine
   - state_machine:
       layout: tiled
       panes:
-        - sleep 10; ros2 launch eletroquad25_sm eletroquad25_sm_launch.py
+        - sleep 8; ros2 topic echo /ghost/debug --truncate-length=10000
+        - sleep 8; ros2 topic echo /x500_px4/fmu/in/trajectory_setpoint | grep -A 3 "position"
+        - sleep 8; ros2 topic echo /x500_px4/fmu/in/trajectory_setpoint | grep -A 3 "velocity"
