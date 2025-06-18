@@ -21,19 +21,13 @@ drones:
     - 0.043
     - 0.0
     - -0.035
-  - model_name: gancho
-    model_type: gancho
-    xyz:
-    - 0.0
-    - 0.0
-    - -0.047
   xyz:
   - 0
   - 0
   - 0.5
 objects:
-- model_name: bouncing
-  model_type: bouncing
+- model_name: hangthehook
+  model_type: hangthehook
   rpy:
   - 0.0
   - 0.0
@@ -42,42 +36,28 @@ objects:
   - 0.0
   - 0.0
   - 0.1
-- model_name: marker_1
+- model_name: base_inicial_hangthehook
   model_type: circulo_azul
   xyz:
-  - -0.24
-  - 2.77
+  - 0.0
+  - 0.0
   - 0.11
-- model_name: marker_2
-  model_type: cruz_rosa
+- model_name: mangueira_e_sustentacao
+  model_type: truss_with_hose
+  rpy:
+  - 0.0
+  - 0.0
+  - 2.21
   xyz:
-  - -2.83
-  - -2.14
-  - 0.11
-- model_name: marker_3
-  model_type: estrela_verde
+  - -1.63
+  - -2.31
+  - 0.12
+- model_name: fita
+  model_type: fita
   xyz:
-  - 3.56
-  - -0.57
-  - 0.11
-- model_name: marker_4
-  model_type: hexagono_vermelho
-  xyz:
-  - 1.48
-  - -3.4
-  - 0.11
-- model_name: marker_5
-  model_type: pentagono_marrom
-  xyz:
-  - -3.28
-  - 0.35
-  - 0.11
-- model_name: marker_7
-  model_type: casa_laranja
-  xyz:
-  - -3.22
-  - 3.09
-  - 0.11
+  - 0.0
+  - 0.0
+  - 0.1
 origin:
   altitude: 2
   latitude: -22.8627458

@@ -26,6 +26,7 @@ windows:
           #- cd $AEROSTACK2_TUTORIAL_PATH/config && python3 randomize_eletroquad.py <%= mission %> && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=<%= simulation_config_file %>
           #- cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_bouncing_fixed.yaml
           - cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_slalom_fixed.yaml
+          #- cd $AEROSTACK2_TUTORIAL_PATH/config && cd .. && ros2 launch as2_gazebo_assets launch_simulation.py use_sim_time:=true simulation_config_file:=config/world_hangthehook_fixed.yaml
 
       <%- end %>
 
@@ -78,8 +79,10 @@ windows:
       layout: tiled
       panes:
         - sleep 5; ros2 launch eletroquad25_sm eletroquad25_sm_launch.py
-        - #rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/bouncing.rviz
-        - rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/slalom.rviz
+        - rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/bouncing.rviz
+        - #rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/slalom.rviz
+        - #rviz2 -d /root/tutorials/src/eletroquad25_sm/rviz_config/hangthehook.rviz
+
   
   # State machine
   - state_machine:
@@ -88,3 +91,4 @@ windows:
         - sleep 8; ros2 topic echo /ghost/debug --truncate-length=10000
         - sleep 8; ros2 topic echo /x500_px4/fmu/in/trajectory_setpoint | grep -A 3 "position"
         - sleep 8; ros2 topic echo /x500_px4/fmu/in/trajectory_setpoint | grep -A 3 "velocity"
+        - sleep 8; ros2 topic echo /x500_px4/fmu/in/trajectory_setpoint | grep -A 1 "yaw"

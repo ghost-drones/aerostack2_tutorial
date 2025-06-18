@@ -38,12 +38,6 @@ drones:
       - 0.0
       - 1.5707
       - 0.0
-  - model_type: gancho
-    model_name: gancho
-    xyz:
-      - 0.0
-      - 0.0
-      - -0.047
 objects:
 - model_name: eletroquad_arena
   model_type: eletroquad_arena

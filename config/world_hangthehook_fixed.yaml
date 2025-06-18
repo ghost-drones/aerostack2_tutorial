@@ -28,28 +28,44 @@ drones:
   rpy:
   - 0
   - 0
-  - 0.4
+  - 0.5
 objects:
-- model_name: bouncing
-  model_type: bouncing
+- model_name: hangthehook
+  model_type: hangthehook
   rpy:
   - 0.0
   - 0.0
-  - 0.4
+  - 0.5
   xyz:
   - 0.0
   - 0.0
   - 0.1
-- model_name: marker_1
+- model_name: base_inicial_hangthehook
   model_type: circulo_azul
   xyz:
-  - 2.77
-  - -0.44
+  - 0.0
+  - 0.0
   - 0.11
+  rpy:
+  - 0
+  - 0
+  - 0.5
+- model_name: mangueira_e_sustentacao
+  model_type: truss_with_hose
   rpy:
   - 0.0
   - 0.0
-  - 0.4
+  - 2.21
+  xyz:
+  - -1.63
+  - -2.31
+  - 0.12
+- model_name: fita
+  model_type: fita
+  xyz:
+  - 0.0
+  - 0.0
+  - 0.1
 origin:
   altitude: 2
   latitude: -22.8627458
